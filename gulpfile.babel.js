@@ -9,6 +9,7 @@ const scss = require('gulp-sass'),
     jshint = require('gulp-jshint'),
     minifyJS = require('gulp-minify'),
     babel = require('gulp-babel'),
+    spritesmith = require('gulp.spritesmith'),
     browserSync = require('browser-sync');
 
 function clean(cb) {
@@ -73,6 +74,15 @@ function watchs() {
     });
 }
 
+function imgSprite() {
+    return src('public/img/sprite/*.png')
+        .pipe(spritesmith({
+            imgName: 'sprite.png',
+            cssName: 'sprite.css',
+        }))
+       .pipe(dest('static/img/sprite'))
+}
+
 function browserReload() {
     browserSync.reload();
 }
@@ -87,4 +97,4 @@ function gulpBrowserSync() {
     });
 }
 
-exports.default = series(css, html, javascript, watchs, gulpBrowserSync);
+exports.default = series(css, html, javascript, imgSprite, watchs, gulpBrowserSync);
